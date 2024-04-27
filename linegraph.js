@@ -1,22 +1,24 @@
 // Using code from this: https://d3-graph-gallery.com/graph/line_several_group.html
 // and this: https://www.data-to-viz.com/caveat/spaghetti.html
 
-// Set the dimensions and margins of the graph
+var containerWidth = document.getElementById('my_dataviz').getBoundingClientRect().width;
+
 var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-    width = 800 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    width = containerWidth - margin.left - margin.right,
+    height = (width / 800) * 500; 
+
 
 // Append the svg object to the body of the page
 var svg = d3.select("#my_dataviz")
   .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+  .attr("preserveAspectRatio", "xMinYMin meet")
+.append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 // Info display setup
 var infoDisplay = svg.append("g")
-  .attr("transform", "translate(" + (width - 260) + ",70)");
+  .attr("transform", "translate(" + (width - 260) + ",20)");
 
 infoDisplay.append("rect")
   .attr("width", 250)
@@ -25,11 +27,12 @@ infoDisplay.append("rect")
   .attr("stroke-width", 2)
   .style("opacity", 0.9);
 
+var infoBoxFontSize = width / 40;
 var infoText = infoDisplay.append("text")
   .attr("x", 10)
   .attr("y", 20)
   .style("text-anchor", "start")
-  .style("font-size", "14px");
+  .style("font-size", infoBoxFontSize + "px");
 
 // Prepare category data
 const highlightCategories = ["Violent charges", "Sex offence charges", "Military misdemeanours", "Theft charges"];
@@ -67,13 +70,16 @@ const categoryTexts = {
         svg.append("g")
             .call(d3.axisLeft(y));
 
+        var yAxisFontSize = width / 40;
+
             svg.append("text")
-            .attr("class", "y label")
-            .attr("text-anchor", "end")
-            .attr("y", 6)
-            .attr("dy", "-3em")
-            .attr("transform", "rotate(-90)")
-            .text("Proportion of court martial cases featuring this charge (%)");
+                .attr("class", "y label")
+                .attr("text-anchor", "end")
+                .attr("y", 2)
+                .attr("dy", "-3em")
+                .attr("transform", "rotate(-90)")
+                .style("font-size", yAxisFontSize + "px")
+                .text("Proportion of court martial cases featuring this charge (%)");
 
         var color = d3.scaleOrdinal()
             .domain(data.map(d => d.category))

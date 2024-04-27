@@ -1,26 +1,62 @@
 .btn {
-    background-color: rgb(85, 85, 85); /* Blue background */
-    border: none; /* Remove borders */
-    color: white; /* White text */
-    padding: 12px 16px; /* Some padding */
-    font-size: 16px; /* Set a font size */
-    cursor: pointer; /* Mouse pointer on hover */
-  }
+  background-color: rgb(85, 85, 85);
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-  * {
-    font-family: sans-serif;
-   }
+* {
+  font-family: sans-serif;
+  margin-left: 10px;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-   #buttonContainer {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
+/* Content style */
+p {
+  margin-bottom: 5px;
+}
+
+/* Container for the visualization */
+#vizContainer {
+  float: left; 
+  width: 50%; 
+  min-width: 35em;
+  margin-right: 10px; 
+  margin-top:0px;
+}
+
+#vizContainer h3 {
+  margin-top: 10px; 
+  margin-bottom: 0;
+}
+
+#vizContainer p {
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+/* Data visualization style */
+#my_dataviz {
+  width: 100%; 
+  height: auto; 
+}
+
+/* Button container */
+#buttonContainer {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top:10px;
+  margin-bottom:10px;
 }
 
 button {
-    margin: 0 5px;
+  height: 40%;
+  width: 25%;
 }
 
-  /* Darker background on mouse-over */
-  .btn:hover {
-    background-color: RoyalBlue;}
+.btn:hover {
+  background-color: RoyalBlue;
+}
