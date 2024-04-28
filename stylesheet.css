@@ -9,6 +9,7 @@
 * {
   font-family: sans-serif;
   margin-left: 10px;
+  margin-right: 10px;
   padding: 0;
   box-sizing: border-box;
 }
@@ -18,30 +19,46 @@ p {
   margin-bottom: 5px;
 }
 
+span {
+  margin: 0px;
+  text-decoration: underline;
+}
+
 /* Container for the visualization */
 #vizContainer {
   float: left; 
   width: 50%; 
-  min-width: 35em;
+  min-width: 50em;
   margin-right: 10px; 
   margin-top:0px;
 }
 
-#vizContainer h3 {
-  margin-top: 10px; 
+#vizContainer, #vizContainer2 h3 {
+  margin-top: 10px;
   margin-bottom: 0;
 }
 
-#vizContainer p {
+#vizContainer, #vizContainer2 {
   font-size: 13px;
   margin-bottom: 20px;
 }
 
+#vizContainer2 {
+  float: right; 
+  width: 50%; 
+  min-width: 50em;
+  margin-right: 10px; 
+  margin-top:0px;
+}
+
+
 /* Data visualization style */
-#my_dataviz {
-  width: 100%; 
+#my_dataviz, #my_dataviz2 {
+  width: 100%;
+  margin-left:-5px; 
   height: auto; 
 }
+
 
 /* Button container */
 #buttonContainer {
