@@ -4,6 +4,12 @@
 
 var containerWidth = document.getElementById('my_dataviz1').getBoundingClientRect().width;
 
+var softColours = [
+    "#fa4d56", "#002d9c", "#7c1158","#6929c4"
+
+];
+
+
 var margin = { top: 10, right: 30, bottom: 30, left: 60 },
     width = containerWidth - margin.left - margin.right,
     height = (width / 800) * 500; 
@@ -21,26 +27,26 @@ var svg = d3.select("#my_dataviz1")
 
 // Info display setup
 var infoDisplay = svg.append("g")
-  .attr("transform", "translate(" + (width - 260) + ",20)");
+  .attr("transform", "translate(" + (width - 270) + ",30)");
 
 infoDisplay.append("rect")
-  .attr("width", 250)
-  .attr("height", 80)
+  .attr("width", 240)
+  .attr("height", 90)
   .attr("fill", "white")
-  .attr("stroke-width", 2)
+  .attr("stroke-width", 3)
   .style("opacity", 0.9);
 
-var infoBoxFontSize = width / 40;
+var infoBoxFontSize = width / 45;
 var infoText = infoDisplay.append("text")
   .attr("x", 10)
-  .attr("y", 20)
+  .attr("y", 30)
   .style("text-anchor", "start")
   .style("font-size", infoBoxFontSize + "px");
 
 // Prepare category data
 const highlightCategories = ["Violent charges", "Sex offence charges", "Military misdemeanours", "Theft charges"];
 const categoryTexts = {
-    "Violent charges": "Violent charges saw a considerable growth, featuring in 35% of all court martial cases in 2010 to 62% in 2023",
+    "Violent charges": "Violent charges saw a considerable growth, featuring in 35% of all court martial cases in 2010 and 62% in 2023",
     "Sex offence charges": "Sex offences saw the biggest change, going from one in 20 cases in 2010 to one in three in 2023",
     "Military misdemeanours": "Military misdemeanour charges have been trending downwards since 2010",
     "Theft charges": "Theft charges remained similarly common between 2010 and 2023"
@@ -89,27 +95,27 @@ const categoryTexts = {
                 .style("font-size", yAxisFontSize + "px")
                 .text("Proportion of court martial cases featuring this charge (%)");
 
-        var color = d3.scaleOrdinal()
-            .domain(data.map(d => d.category))
-            .range(d3.schemeCategory10);
+            var colour = d3.scaleOrdinal()
+                .domain(highlightCategories)
+                .range(softColours);
 
         let currentCategoryIndex = -1;
 
         function highlightNextCategory() {
           currentCategoryIndex = (currentCategoryIndex + 1) % highlightCategories.length;
-          updateVisualization();
+          updateVisualisation();
       }
 
       function highlightLastCategory() {
         currentCategoryIndex = (currentCategoryIndex - 1 + highlightCategories.length) % highlightCategories.length;
-        updateVisualization();
+        updateVisualisation();
     }
 
-    function updateVisualization() {
+    function updateVisualisation() {
       const currentCategory = highlightCategories[currentCategoryIndex];
-      const categoryColor = color(currentCategory); // Get the color for the current category
-  
-      // Update line styles and colors
+      const categoryColour = colour(currentCategory);
+
+      // Update line styles and colours
       svg.selectAll(".line").remove();
       svg.selectAll(".line")
           .data(sumstat)
@@ -117,7 +123,7 @@ const categoryTexts = {
           .append("path")
               .attr("class", "line")
               .attr("fill", "none")
-              .attr("stroke", d => d[0] === currentCategory ? categoryColor : "grey")
+              .attr("stroke", d => d[0] === currentCategory ? categoryColour : "grey")
               .attr("stroke-width", d => d[0] === currentCategory ? 3 : 1)
               .attr("d", d => d3.line()
                   .x(d => x(d.year))
@@ -127,13 +133,13 @@ const categoryTexts = {
       // Update text information display
       updateInfoDisplay(categoryTexts[currentCategory]);
   
-      // Change the rectangle's fill color to match the line color
-      infoDisplay.select("rect").attr("stroke", categoryColor);
+      // Change the rectangle's fill colour to match the line colour
+      infoDisplay.select("rect").attr("stroke", categoryColour);
   }
 
 
         function updateInfoDisplay(text) {
-          infoText.selectAll("*").remove(); // Clear previous text
+          infoText.selectAll("*").remove();
       
           const rectHeight = 80; 
           const x = 10; 
@@ -165,8 +171,8 @@ const categoryTexts = {
           // Add link for where i found bbox guide
           var bbox = infoText.node().getBBox();
           var textHeight = bbox.height;
-          var startY = (rectHeight - textHeight) / 2 + bbox.y; // Calculate the center position
-      
+          var startY = (rectHeight - textHeight) / 2 + bbox.y;
+
           // Adjust the text group position to center it vertically
           infoText.attr("transform", "translate(0," + (startY - bbox.y) + ")");
       }
@@ -207,7 +213,19 @@ function setupBasicLineGraph() {
     var y = d3.scaleLinear()
             .domain([0, 100])
             .range([height, 0]);
-    var color = d3.scaleOrdinal(d3.schemeCategory10);
+    var colour = d3.scaleOrdinal(d3.schemeCategory10);
+
+    var yAxisFontSize = width / 50;
+    
+                svg.append("text")
+                .attr("class", "y label2")
+                .attr("text-anchor", "end")
+                .attr("y", 4)
+                .attr("dy", "-3em")
+                .attr("transform", "rotate(-90)")
+                .style("font-size", yAxisFontSize + "px")
+                .text("Conviction rate for those facing violent and sex offence charges (%)");
+
 
     d3.csv("long_format_conviction_rates.csv").then(function(data) {
         console.log("Data loaded successfully:", data);
@@ -233,12 +251,16 @@ function setupBasicLineGraph() {
         .selectAll("text")
         .style("font-size", axisFontSize);
 
+        var colour = d3.scaleOrdinal()
+                .domain(highlightCategories)
+                .range(softColours);
+
         sumstat.forEach(function(values, key) {
             svg.append("path")
                 .datum(values)
                 .attr("class", "line")
                 .attr("fill", "none")
-                .attr("stroke", color(key))
+                .attr("stroke", colour(key))
                 .attr("stroke-width", 3)
                 .attr("d", d3.line()
                     .x(d => x(d.year))
