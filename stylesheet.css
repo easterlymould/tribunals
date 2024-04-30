@@ -7,7 +7,7 @@
 }
 
 * {
-  font-family: sans-serif;
+  font-family: arial;
   margin-left: 10px;
   margin-right: 10px;
   padding: 0;
@@ -24,11 +24,20 @@ span {
   text-decoration: underline;
 }
 
+#source {
+  text-align: center;
+}
+
+p a {
+  display: inline-block;
+  margin: 0; /* Removes any default margin */
+  padding: 0; /* Removes any default padding */
+}
+
 /* Container for the visualization */
 #vizContainer {
   float: left; 
-  width: 50%; 
-  min-width: 55em;
+  min-width: 60em;
   margin-right: 10px;
   margin-left: -5px; 
   margin-top:0px;
@@ -48,25 +57,17 @@ span {
 
 
 #vizContainer, #vizContainer2 {
-  font-size: 13px;
+  font-size: 13.5px;
   margin-bottom: 20px;
 }
 
 #vizContainer2 {
   float: right; 
-  width: 50%; 
-  min-width: 50em;
+  max-width: 60em;
   margin-right: 10px; 
   margin-top:0px;
 }
 
-
-/* Data visualization style */
-#my_dataviz, #my_dataviz2 {
-  width: 100%;
-  margin-left:-5px; 
-  height: auto; 
-}
 
 
 /* Button container */

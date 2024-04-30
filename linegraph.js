@@ -1,11 +1,10 @@
 // Using code from this: https://d3-graph-gallery.com/graph/line_several_group.html
 // and this: https://www.data-to-viz.com/caveat/spaghetti.html
 
-
 var containerWidth = document.getElementById('my_dataviz1').getBoundingClientRect().width;
 
 var softColours = [
-    "#fa4d56", "#002d9c", "#7c1158","#6929c4"
+    "#B22222", "#002d9c", "#7c1158","#5d914c"
 
 ];
 
@@ -14,7 +13,12 @@ var margin = { top: 10, right: 30, bottom: 30, left: 60 },
     width = containerWidth - margin.left - margin.right,
     height = (width / 800) * 500; 
 
-var axisFontSize = "14px"
+var baseFontSize = 16
+
+var axisFontSize = baseFontSize * 0.85
+
+var yLabelFontSize = baseFontSize * 0.95
+
 var tickValues = d3.range(2010, 2024, 2);
 
 // Append the svg object to the body of the page
@@ -30,24 +34,26 @@ var infoDisplay = svg.append("g")
   .attr("transform", "translate(" + (width - 270) + ",30)");
 
 infoDisplay.append("rect")
-  .attr("width", 240)
-  .attr("height", 90)
+  .attr("width", 245)
+  .attr("height", 120)
   .attr("fill", "white")
-  .attr("stroke-width", 3)
+  .attr("rx", 4)
+  .attr("stroke-width", 2.5)
   .style("opacity", 0.9);
+  
 
-var infoBoxFontSize = width / 45;
+
 var infoText = infoDisplay.append("text")
   .attr("x", 10)
-  .attr("y", 30)
+  .attr("y", 60)
   .style("text-anchor", "start")
-  .style("font-size", infoBoxFontSize + "px");
+  .style("font-size", baseFontSize + "px");
 
 // Prepare category data
 const highlightCategories = ["Violent charges", "Sex offence charges", "Military misdemeanours", "Theft charges"];
 const categoryTexts = {
     "Violent charges": "Violent charges saw a considerable growth, featuring in 35% of all court martial cases in 2010 and 62% in 2023",
-    "Sex offence charges": "Sex offences saw the biggest change, going from one in 20 cases in 2010 to one in three in 2023",
+    "Sex offence charges": "Sex offences saw the biggest change, growing from one in 20 cases in 2010 to one in three in 2023",
     "Military misdemeanours": "Military misdemeanour charges have been trending downwards since 2010",
     "Theft charges": "Theft charges remained similarly common between 2010 and 2023"
 };
@@ -82,17 +88,16 @@ const categoryTexts = {
         svg.append("g")
             .call(d3.axisLeft(y))
             .selectAll("text") 
-            .style("font-size", axisFontSize);
-
-        var yAxisFontSize = width / 40;
+            .style("font-size", axisFontSize + "px");
 
             svg.append("text")
                 .attr("class", "y label")
                 .attr("text-anchor", "end")
                 .attr("y", 2)
+                .attr("x", -20)
                 .attr("dy", "-3em")
                 .attr("transform", "rotate(-90)")
-                .style("font-size", yAxisFontSize + "px")
+                .style("font-size", axisFontSize + "px")
                 .text("Proportion of court martial cases featuring this charge (%)");
 
             var colour = d3.scaleOrdinal()
@@ -141,14 +146,14 @@ const categoryTexts = {
         function updateInfoDisplay(text) {
           infoText.selectAll("*").remove();
       
-          const rectHeight = 80; 
+          const rectHeight = 110; 
           const x = 10; 
           const maxWidth = 230;
       
           // Start the first line of text
           var tspan = infoText.append("tspan")
               .attr("x", x)
-              .attr("y", 10)
+              .attr("y", 15)
               .attr("text-anchor", "start");
       
           var words = text.split(/\s+/);
@@ -206,6 +211,7 @@ function setupBasicLineGraph() {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
     // Scales and axes setup with the same domains and styles
     var x = d3.scaleLinear()
             .domain([2010, 2023])
@@ -213,18 +219,16 @@ function setupBasicLineGraph() {
     var y = d3.scaleLinear()
             .domain([0, 100])
             .range([height, 0]);
-    var colour = d3.scaleOrdinal(d3.schemeCategory10);
 
-    var yAxisFontSize = width / 50;
-    
                 svg.append("text")
                 .attr("class", "y label2")
                 .attr("text-anchor", "end")
                 .attr("y", 4)
+                .attr("x", -40)
                 .attr("dy", "-3em")
                 .attr("transform", "rotate(-90)")
-                .style("font-size", yAxisFontSize + "px")
-                .text("Conviction rate for those facing violent and sex offence charges (%)");
+                .style("font-size", yLabelFontSize + "px")
+                .text("Conviction rate on violent and sex offence charges (%)");
 
 
     d3.csv("long_format_conviction_rates.csv").then(function(data) {
