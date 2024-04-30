@@ -19,6 +19,20 @@ p {
   margin-bottom: 5px;
 }
 
+h2 {
+  font-size: 20px;
+}
+
+@media (max-width: 600px) { /* Adjust this value based on when you want to target smaller screens */
+  #vizContainer, #vizContainer2  {
+      width: 100%; /* Set the SVG width to 100% of its container */
+      height: auto; /* Maintain the aspect ratio */
+  }
+  .graph-text { 
+      font-size: larger;
+  }
+}
+
 span {
   margin: 0px;
   text-decoration: underline;
@@ -34,38 +48,43 @@ p a {
   padding: 0; /* Removes any default padding */
 }
 
+#vizContainer p {
+  font-size: 12px;
+}
+
+#vizContainer2 p {
+  font-size: 12px;
+}
+
+#my_dataviz1, #my_dataviz2 {
+  margin-bottom: -10px;
+}
+
 /* Container for the visualization */
 #vizContainer {
   float: left; 
-  min-width: 60em;
+  width: 40%;
+  min-width: 45em;
   margin-right: 10px;
   margin-left: -5px; 
   margin-top:0px;
 }
 
-#vizContainer h3 {
-  margin-top: 10px;
-  margin-left: 50px;
+
+#vizContainer2 {
+  float: right; 
+  width: 40%;
+  min-width: 45em;
+  margin-right: 10px; 
+  margin-top:0px;
 }
+
 
 #vizContainer2 h3 {
   margin-bottom: 10px;
   margin-top: 10px;
   margin-left: 10px;
   float:right;
-}
-
-
-#vizContainer, #vizContainer2 {
-  font-size: 13.5px;
-  margin-bottom: 20px;
-}
-
-#vizContainer2 {
-  float: right; 
-  max-width: 60em;
-  margin-right: 10px; 
-  margin-top:0px;
 }
 
 

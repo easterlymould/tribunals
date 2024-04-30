@@ -1,17 +1,21 @@
 // Using code from this: https://d3-graph-gallery.com/graph/line_several_group.html
 // and this: https://www.data-to-viz.com/caveat/spaghetti.html
 
-var containerWidth = document.getElementById('my_dataviz1').getBoundingClientRect().width;
 
 var softColours = [
     "#B22222", "#002d9c", "#7c1158","#5d914c"
 
 ];
 
+function getVisualizationDimensions(containerId) {
+    var container = document.getElementById(containerId);
+    var containerWidth = container.getBoundingClientRect().width;
+    var margin = { top: 10, right: 30, bottom: 30, left: 60 };
+    var width = containerWidth - margin.left - margin.right;
+    var height = (width / 800) * 500;  // Maintain the aspect ratio
 
-var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-    width = containerWidth - margin.left - margin.right,
-    height = (width / 800) * 500; 
+    return { width, height, margin };
+}
 
 var baseFontSize = 16
 
@@ -22,20 +26,21 @@ var yLabelFontSize = baseFontSize * 0.95
 var tickValues = d3.range(2010, 2024, 2);
 
 // Append the svg object to the body of the page
-var svg = d3.select("#my_dataviz1")
-  .append("svg")
-  .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
-  .attr("preserveAspectRatio", "xMinYMin meet")
-.append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var dims = getVisualizationDimensions('my_dataviz1');
+        var svg = d3.select("#my_dataviz1")
+            .append("svg")
+            .attr("viewBox", `0 0 ${dims.width + dims.margin.left + dims.margin.right} ${dims.height + dims.margin.top + dims.margin.bottom}`)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .append("g")
+            .attr("transform", `translate(${dims.margin.left}, ${dims.margin.top})`);
 
 // Info display setup
 var infoDisplay = svg.append("g")
-  .attr("transform", "translate(" + (width - 270) + ",30)");
+  .attr("transform", "translate(" + (dims.width - 270) + ",30)");
 
 infoDisplay.append("rect")
   .attr("width", 245)
-  .attr("height", 120)
+  .attr("height", 100)
   .attr("fill", "white")
   .attr("rx", 4)
   .attr("stroke-width", 2.5)
@@ -44,7 +49,7 @@ infoDisplay.append("rect")
 
 
 var infoText = infoDisplay.append("text")
-  .attr("x", 10)
+  .attr("x", 20)
   .attr("y", 60)
   .style("text-anchor", "start")
   .style("font-size", baseFontSize + "px");
@@ -73,9 +78,9 @@ const categoryTexts = {
         // Axis setup
         var x = d3.scaleLinear()
             .domain(d3.extent(data, d => d.year))
-            .range([0, width]);
+            .range([0, dims.width]);
             svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
+            .attr("transform", "translate(0," + dims.height + ")")
             .call(d3.axisBottom(x)
                   .tickValues(tickValues)
                   .tickFormat(d3.format("d")))
@@ -84,7 +89,7 @@ const categoryTexts = {
 
         var y = d3.scaleLinear()
             .domain([0, 100])
-            .range([height, 0]);
+            .range([dims.height, 0]);
         svg.append("g")
             .call(d3.axisLeft(y))
             .selectAll("text") 
@@ -93,11 +98,11 @@ const categoryTexts = {
             svg.append("text")
                 .attr("class", "y label")
                 .attr("text-anchor", "end")
-                .attr("y", 2)
-                .attr("x", -20)
-                .attr("dy", "-3em")
+                .attr("y", 0)
+                .attr("x", 0)
+                .attr("dy", "-2.5em")
                 .attr("transform", "rotate(-90)")
-                .style("font-size", axisFontSize + "px")
+                .style("font-size", yLabelFontSize + "px")
                 .text("Proportion of court martial cases featuring this charge (%)");
 
             var colour = d3.scaleOrdinal()
@@ -153,7 +158,7 @@ const categoryTexts = {
           // Start the first line of text
           var tspan = infoText.append("tspan")
               .attr("x", x)
-              .attr("y", 15)
+              .attr("y", 10)
               .attr("text-anchor", "start");
       
           var words = text.split(/\s+/);
@@ -196,35 +201,28 @@ const categoryTexts = {
 
 function setupBasicLineGraph() {
     console.log("Setting up the basic line graph...");
-
-    // Use the same container width calculation for consistent responsiveness
-    var containerWidth = document.getElementById('my_dataviz2').getBoundingClientRect().width;
-    var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-        width = containerWidth - margin.left - margin.right,
-        height = (width / 800) * 500;
-
-    // Create the SVG container with the same viewBox and preserveAspectRatio
-    var svg = d3.select("#my_dataviz2")
-        .append("svg")
-        .attr("viewBox", `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
-        .attr("preserveAspectRatio", "xMinYMin meet")
-        .append("g")
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var dims = getVisualizationDimensions('my_dataviz2');
+        var svg = d3.select("#my_dataviz2")
+            .append("svg")
+            .attr("viewBox", `0 0 ${dims.width + dims.margin.left + dims.margin.right} ${dims.height + dims.margin.top + dims.margin.bottom}`)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .append("g")
+            .attr("transform", `translate(${dims.margin.left}, ${dims.margin.top})`);    
 
 
     // Scales and axes setup with the same domains and styles
     var x = d3.scaleLinear()
             .domain([2010, 2023])
-            .range([0, width]);
+            .range([0, dims.width]);
     var y = d3.scaleLinear()
             .domain([0, 100])
-            .range([height, 0]);
+            .range([dims.height, 0]);
 
                 svg.append("text")
                 .attr("class", "y label2")
                 .attr("text-anchor", "end")
                 .attr("y", 4)
-                .attr("x", -40)
+                .attr("x", 0)
                 .attr("dy", "-3em")
                 .attr("transform", "rotate(-90)")
                 .style("font-size", yLabelFontSize + "px")
@@ -242,7 +240,7 @@ function setupBasicLineGraph() {
         var sumstat = d3.group(data, d => d.category);
 
         svg.append("g")
-   .attr("transform", "translate(0," + height + ")")
+   .attr("transform", "translate(0," + dims.height + ")")
    .call(d3.axisBottom(x)
          .tickValues(tickValues)
          .tickFormat(d3.format("d")))
